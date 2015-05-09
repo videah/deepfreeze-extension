@@ -1,121 +1,112 @@
 var DeepFreezeOptions = {
 
-    init: function() {
+	init: function() {
 
-        self = this
-        self.createOutletTable();
+		self = this
+		self.createOutletTable();
 
-    },
+	},
 
-    createOutletTable: function() {
+	createOutletTable: function() {
 
-        var outlets = kango.storage.getItem('outlets')
-        var outletStatuses = kango.storage.getItem('outletStatuses')
+		var outlets = kango.storage.getItem('outlets')
+		var outletStatuses = kango.storage.getItem('outletStatuses')
 
-        var myTableDiv = document.getElementById("outletTable")
-        var table = document.createElement('TABLE')
-        var tableBody = document.createElement('TBODY')
+		var myTableDiv = document.getElementById("outletTable")
+		var table = document.createElement('TABLE')
+		var tableBody = document.createElement('TBODY')
 
-        table.border = '1'
-        table.id = 'actualOutletTable'
-        table.style.textAlign = 'center';
-        table.appendChild(tableBody);
+		table.border = '1'
+		table.id = 'actualOutletTable'
+		table.style.textAlign = 'center';
+		table.appendChild(tableBody);
 
-        var heading = new Array();
-        heading[0] = "Outlet"
-        heading[1] = "Outlet Status"
+		var heading = new Array();
+		heading[0] = "Outlet"
+		heading[1] = "Outlet Status"
 
-        //Table Columns
-        var tr = document.createElement('TR');
-        tableBody.appendChild(tr);
-        for (i = 0; i < heading.length; i++) {
-            var th = document.createElement('TH')
-            th.width = '200';
-            th.appendChild(document.createTextNode(heading[i]));
-            tr.appendChild(th);
-        }
+		//Table Columns
+		var tr = document.createElement('TR');
+		tableBody.appendChild(tr);
+		for (i = 0; i < heading.length; i++) {
+			var th = document.createElement('TH')
+			th.width = '200';
+			th.appendChild(document.createTextNode(heading[i]));
+			tr.appendChild(th);
+		}
 
-        //Table Rows
-        for (i = 0; i < outlets.length; i++) {
-            var tr = document.createElement('TR');
-            for (j = 0; j < 2; j++) {
-                var td = document.createElement('TD')
+		//Table Rows
+		for (i = 0; i < outlets.length; i++) {
+			var tr = document.createElement('TR');
+			for (j = 0; j < 2; j++) {
+				var td = document.createElement('TD')
 
-                if (j == 0) {
+				if (j == 0) {
 
-                    var outletName = document.createTextNode(outlets[i]);
+					var outletName = document.createTextNode(outlets[i]);
 
-                    if (outletStatuses[i] == "Boycotted") {
-                        td.style.color = 'red'
-                    }
+					if (outletStatuses[i] == "Boycotted") {
+						td.style.color = 'red'
+					}
 
-                    td.appendChild(outletName);
-                }
+					td.appendChild(outletName);
+				}
 
-                if (j == 1) {
+				if (j == 1) {
 
-                    if (outletStatuses[i] == "Defunct") {
+					var status = document.createElement("select");
+					status.className = "dropdownSetting"
 
-                        var status = document.createTextNode("Defunct")
+					optionNeutral = document.createElement("option")
+					optionNeutral.value = "Neutral"
+					optionNeutral.text = "Neutral"
 
-                    } else {
+					optionBoycotted = document.createElement("option")
+					optionBoycotted.value = "Boycotted"
+					optionBoycotted.text = "Boycotted"
 
-                        var status = document.createElement("select");
-                        status.id = "dropdownSetting"
+					status.options.add(optionNeutral)
+					status.options.add(optionBoycotted)
 
-                        optionNeutral = document.createElement("option")
-                        optionNeutral.value = "Neutral"
-                        optionNeutral.text = "Neutral"
+					status.style.width = '100%'
 
-                        optionBoycotted = document.createElement("option")
-                        optionBoycotted.value = "Boycotted"
-                        optionBoycotted.text = "Boycotted"
+					if (outletStatuses[i] == "Boycotted") {
+						status.selectedIndex = 1
+					}
 
-                        status.options.add(optionNeutral)
-                        status.options.add(optionBoycotted)
+					td.appendChild(status)
+				}
 
-                        status.style.width = '100%'
-
-                        if (outletStatuses[i] == "Boycotted") {
-                            status.selectedIndex = 1
-                        }
-
-                    }
-
-                    td.appendChild(status)
-                }
-
-                tr.appendChild(td)
-            }
-            tableBody.appendChild(tr);
-        }
-        myTableDiv.appendChild(table)
-    }
+				tr.appendChild(td)
+			}
+			tableBody.appendChild(tr);
+		}
+		myTableDiv.appendChild(table)
+	}
 
 }
 
 KangoAPI.onReady(function() {
 
-    var outlets = kango.storage.getItem('outlets')
-    var outletStatuses = kango.storage.getItem('outletStatuses')
+	var outlets = kango.storage.getItem('outlets')
+	var outletStatuses = kango.storage.getItem('outletStatuses')
 
-    DeepFreezeOptions.init();
+	$('#save').click(function(event) {
 
-    $('#save').click(function(event) {
+		var dropList = document.getElementsByClassName("dropdownSetting")
+		dropList = [].slice.call(dropList);
 
-        var dropList = document.getElementById("dropdownSetting")
+		for (i = 0; i < dropList.length; i++) {
 
-        for (i = 0; i < dropList.length; i++) {
+			dropList[i] = dropList[i].value;
 
-            outletStatuses[i] = dropList[i]
+		}
 
-        }
+		kango.invokeAsync('kango.storage.setItem', 'outletStatuses', dropList);
 
-        kango.storage.setItem('outletStatuses', outletStatuses)
+	});
 
-        kango.console.log("Saved settings.")
-
-    });
+	DeepFreezeOptions.init();
 
 });
 
