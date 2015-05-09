@@ -13,5 +13,10 @@
         "tooltipText": "DeepFreeze"
     }, 
     "name": "DeepFreeze",
-    "options_page": "options.html"
+    "options_page": "options.html",
+    "popup": {
+        "url": "popup.html",
+        "width": 200,
+        "height": 100
+    }
 }

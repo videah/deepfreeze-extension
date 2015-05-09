@@ -91,8 +91,11 @@ function getOutletStatuses() {
 function DeepFreeze() {
 
 	var self = this;
-	kango.ui.browserButton.addEventListener(kango.ui.browserButton.event.COMMAND, function() {
-		self._setLevel(5);
+
+	kango.ui.browserButton.setPopup({
+		url: 'popup.html',
+		width: 200,
+		height: 300
 	});
 
 	kango.storage.setItem('outlets', getOutletList());
