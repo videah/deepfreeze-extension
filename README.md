@@ -23,7 +23,9 @@ This extension uses the [Kango Extension Framework](http://kangoextensions.com/)
 To build, run:
 ```kango.py build path/to/src/folder/here```
 
-### Note
+### Notes
 This extension was made to help learn JavaScript, so the code is probably garbage.
 
 Feel free to make a pull request on any junk code you see.
+
+Also, the extension is currently scraping the data directly from [deepfreeze.it](http://deepfreez.it) right now, as they currently do not have an API. If an API is created, I will impliment it here.
