@@ -1,0 +1,16 @@
+{
+    "content_scripts": [], 
+    "description": "Your trust should be earned", 
+    "creator": "Ruairidh 'VideahGams' Carmichael", 
+    "background_scripts": [
+        "main.js"
+    ], 
+    "homepage_url": "http://github.com/VideahGams", 
+    "version": "0.1.0", 
+    "browser_button": {
+        "caption": "DeepFreeze", 
+        "icon": "icons/button.png", 
+        "tooltipText": "DeepFreeze"
+    }, 
+    "name": "DeepFreeze"
+}
