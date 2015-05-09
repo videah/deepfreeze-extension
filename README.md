@@ -1,4 +1,6 @@
-# deepfreeze-extension
+<p align="center">
+  <img src="http://i.imgur.com/xsBy9vN.png"/>
+</p>
 
 This browser extension is an unofficial extension for [deepfreeze.it](http://deepfreeze.it)
 
