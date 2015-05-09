@@ -52,7 +52,7 @@ function getOutletList() {
 	for (i = 0; i < outletList.length; i++) {
 
 		outletList[i] = outletList[i].textContent;
-		outletList[i] = outletList[i].trim()
+		outletList[i] = outletList[i].trim();
 
 	}
 
@@ -60,15 +60,39 @@ function getOutletList() {
 
 }
 
-function getOutletStatus(outlet) {
+function getOutletStatuses() {
 
-	//TODO
+	var request = kango.xhr.getXMLHttpRequest();
+	request.open('GET', 'http://deepfreeze.it/outlet.php', false);
+	request.send(null);
+
+	var deepFreezeHTML = document.implementation.createHTMLDocument("outlets");
+	deepFreezeHTML.documentElement.innerHTML = request.responseText;
+
+	var statusList = deepFreezeHTML.getElementsByClassName("td_t");
+	statusList = [].slice.call(statusList);
+
+	for (i = 0; i < statusList.length; i++) {
+
+		statusList[i] = statusList[i].textContent;
+		statusList[i] = statusList[i].trim();
+
+	}
+
+	return statusList;
 
 }
 
 ////////////////////////////////////////
 
-var outlets = getOutletList()
+if (kango.storage.getItem('enabled') == null) {
+
+	kango.storage.setItem('enabled', false)
+
+}
+
+kango.storage.setItem('outlets', getOutletList());
+kango.storage.setItem('outletStatuses', getOutletStatuses());
 
 function DeepFreeze() {
 
@@ -80,14 +104,28 @@ function DeepFreeze() {
 	// Redirect from boycotted sites.
 	kango.browser.addEventListener(kango.browser.event.BEFORE_NAVIGATE, function(event) {
 
+		var outlets = kango.storage.getItem('outlets');
+		var outletStatuses = kango.storage.getItem('outletStatuses');
+
 		for (i = 0; i < outlets.length; i++) {
 
 			var domain = getDomainFromUrl(event.url);
 			var outletDomain = getDomainFromOutlet(outlets[i]); // outlet.domain
 			var outletFullDomain = getFullDomainFromOutlet(outlets[i]); // www.outlet.domain
 
+			var status = outletStatuses[i]
+
 			if (domain == outletDomain || domain == outletFullDomain) {
-				event.target.navigate(convertToOutletPage(outlets[i]));
+
+				kango.console.log("Site " + outletFullDomain + " is on the DeepFreeze outlet list.")
+
+				if (status == "Boycotted") {
+
+					kango.console.log("Site " + outletFullDomain + " is boycotted!")
+
+					event.target.navigate(convertToOutletPage(outlets[i]));
+
+				}
 			}
 
 		}

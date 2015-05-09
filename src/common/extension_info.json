@@ -12,5 +12,6 @@
         "icon": "icons/button.png", 
         "tooltipText": "DeepFreeze"
     }, 
-    "name": "DeepFreeze"
+    "name": "DeepFreeze",
+    "options_page": "options.html"
 }
