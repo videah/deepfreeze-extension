@@ -7,6 +7,11 @@ Note: These aren't fully working yet.
  * Blocking Outlets by DeepFreeze status (Boycotted or Neutral)
  * Manually blocking Outlets
 
+### Supported Browsers
+ * Firefox
+ * Chrome
+ * Safari
+
 ### Possible Upcoming Features
  * Find mentions of journalists on the page and allow you to jump to their DeepFreeze page
 
