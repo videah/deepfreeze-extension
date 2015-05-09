@@ -26,10 +26,10 @@ function getFullDomainFromOutlet(outlet) { // www.outlet.domain
 	var finalDomain;
 	finalDomain = outlet.toLowerCase();
 	finalDomain = finalDomain.replace(" ", ""); // Strip spaces
-	finalDomain = "www." + finalDomain;
 	if (finalDomain.indexOf(".") == -1 ) {
 		finalDomain = finalDomain + ".com";
 	}
+	finalDomain = "www." + finalDomain;
 	return finalDomain;
 
 }
