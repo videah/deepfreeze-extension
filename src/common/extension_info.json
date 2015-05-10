@@ -1,22 +1,22 @@
 {
-    "content_scripts": [], 
-    "description": "Your trust should be earned", 
-    "creator": "Ruairidh 'VideahGams' Carmichael", 
-    "background_scripts": [
-        "main.js"
-    ], 
-    "homepage_url": "http://github.com/VideahGams", 
-    "version": "0.1.0", 
-    "browser_button": {
-        "caption": "DeepFreeze", 
-        "icon": "icons/button.png", 
-        "tooltipText": "DeepFreeze"
-    }, 
-    "name": "DeepFreeze",
-    "options_page": "options.html",
-    "popup": {
-        "url": "popup.html",
-        "width": 200,
-        "height": 100
-    }
+	"content_scripts": ["journalists.js"], 
+	"description": "Your trust should be earned", 
+	"creator": "Ruairidh 'VideahGams' Carmichael", 
+	"background_scripts": [
+		"main.js"
+	], 
+	"homepage_url": "http://github.com/VideahGams", 
+	"version": "0.1.0", 
+	"browser_button": {
+		"caption": "DeepFreeze", 
+		"icon": "icons/button.png", 
+		"tooltipText": "DeepFreeze"
+	}, 
+	"name": "DeepFreeze",
+	"options_page": "options.html",
+	"popup": {
+		"url": "popup.html",
+		"width": 400,
+		"height": 100
+	}
 }

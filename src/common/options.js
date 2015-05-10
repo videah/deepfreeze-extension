@@ -104,6 +104,8 @@ KangoAPI.onReady(function() {
 
 		kango.invokeAsync('kango.storage.setItem', 'outletStatuses', dropList);
 
+		KangoAPI.closeWindow();
+
 	});
 
 	DeepFreezeOptions.init();
