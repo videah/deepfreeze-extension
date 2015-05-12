@@ -122,15 +122,21 @@ function DeepFreeze() {
 		height: 300
 	});
 
-	kango.storage.setItem('outlets', getOutletList());
-	kango.storage.setItem('outletStatuses', getOutletStatuses());
-	kango.storage.setItem('journoList', getJournoList());
+	kango.storage.setItem('outlets', getOutletList()); // Get the list of outlets from DeepFreeze.
+
+	self._generateDefaultSettings()
+
+	kango.storage.setItem('journoList', getJournoList()); // Get the list of Journolists from DeepFreeze
 
 	var emptyJournos = []
-	kango.storage.setItem("foundJournos", emptyJournos)
+	kango.storage.setItem("foundJournos", emptyJournos) // Reset the foundJournos List.
 
 	// Redirect from boycotted sites.
 	kango.browser.addEventListener(kango.browser.event.BEFORE_NAVIGATE, function(event) {
+
+		var emptyJournos = []
+		self._setNumOfJournos(0) // Reset the level to be sure
+		kango.storage.setItem("foundJournos", emptyJournos) // Reset the Journo list for popup
 
 		var outlets = kango.storage.getItem('outlets');
 		var outletStatuses = kango.storage.getItem('outletStatuses');
@@ -153,7 +159,7 @@ function DeepFreeze() {
 
 					kango.console.log("Site " + outletFullDomain + " is boycotted!")
 
-					//event.target.navigate(convertToOutletPage(outlets[i]));
+					event.target.navigate(convertToOutletPage(outlets[i]));
 
 				}
 			}
@@ -162,11 +168,13 @@ function DeepFreeze() {
 
 	});
 
-	// Get the journalists from that page.
 	kango.browser.addEventListener(kango.browser.event.DOCUMENT_COMPLETE, function(event) {
 
+		// We've loaded the page, quickly scan for journo names.
+		// NOTE: Can be pretty slow if it's a big page...
+
 		var emptyJournos = []
-		self._setLevel(0) // Reset the level to be sure
+		self._setNumOfJournos(0) // Reset the level to be sure
 		kango.storage.setItem("foundJournos", emptyJournos) // Reset the Journo list for popup
 
 		var journoList = kango.storage.getItem('journoList');
@@ -180,8 +188,11 @@ function DeepFreeze() {
 
 	kango.browser.addEventListener(kango.browser.event.TAB_CHANGED, function(event) {
 
+		// We already know if a journo name is on the page, no need to generate again,
+		// Just retrieve it from the pages content script.
+
 		var emptyJournos = []
-		self._setLevel(0)
+		self._setNumOfJournos(0)
 		kango.storage.setItem("foundJournos", emptyJournos)
 
 		event.target.dispatchMessage("getJournos")
@@ -190,8 +201,10 @@ function DeepFreeze() {
 
 	kango.addMessageListener("foundJournos", function(event) {
 
+		// Set the badge icon + store the found Journalists.
+
 		kango.storage.setItem("foundJournos", event.data.journos)
-		self._setLevel(event.data.journos.length)
+		self._setNumOfJournos(event.data.journos.length)
 
 	});
 
@@ -200,36 +213,59 @@ function DeepFreeze() {
 
 DeepFreeze.prototype = {
 
-	_setLevel: function(lvl) {
+	_setNumOfJournos: function(lvl) {
 		kango.ui.browserButton.setBadgeValue(lvl);
+	},
+
+	_generateDefaultSettings: function() {
+
+		if (kango.storage.getItem('outletStatuses') == null) { // Boycott Statuses
+
+			kango.console.log("Created new status list.")
+		
+			// We haven't created a status list, do that now.
+
+			var newStatuses = []
+			var o = kango.storage.getItem('outlets')
+
+			for (i = 0; i < o.length; i++) {
+
+				newStatuses[i] = 'Neutral'
+
+			}
+
+			kango.storage.setItem('outletStatuses', newStatuses)
+
+		}
+
+		var o = kango.storage.getItem('outlets')
+		var s = kango.storage.getItem('outletStatuses')
+
+		if (o.length > s.length) {
+
+			// If a new outlets been added to DeepFreeze, add it to the list. 
+			// NOTE: What happens if an outlets deleted from DeepFreeze? No idea, but I doubt it'll happen.
+
+			var dif = o.length - s.length
+
+			for (i = 0; i < dif; i++) {
+
+				s[s.length + i] = 'Neutral'
+
+			}
+
+		}
+
+		if (kango.storage.getItem('boycottEnabled') == null) {
+
+			// Should we redirect outlets?
+
+			kango.storage.setItem('boycottEnabled', false)
+
+		}
+
 	}
 
 };
 
 var extension = new DeepFreeze();
-
-// var journoList = kango.storage.getItem('journoList');
-
-// function scanForJournos() {
-
-// 	var foundJournos = []
-
-// 	for (i = 0; i < journoList.length; i++) {
-
-// 		var containsJourno = $('*:contains("' + journoList[i] + '")')
-
-// 		if (containsJourno.length) {
-			
-// 			foundJournos[foundJournos.length] = journoList[i]
-// 			kango.console.log("Found journo " + journoList[i])
-
-// 		}
-
-// 	}
-
-// 	kango.invokeAsync('kango.storage.setItem', 'foundJournos', foundJournos);
-// 	kango.invokeAsync('extension._setLevel', foundJournos.length);
-
-// }
-
-// window.setInterval(scanForJournos, 2000)

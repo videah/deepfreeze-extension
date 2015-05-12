@@ -91,77 +91,45 @@ KangoAPI.onReady(function() {
 	var outlets = kango.storage.getItem('outlets')
 	var outletStatuses = kango.storage.getItem('outletStatuses')
 
+	if (kango.storage.getItem('boycottEnabled') == true) {
+
+		$('#enabled').attr('checked', true)
+
+	}
+
 	$('#save').click(function(event) {
 
-		var dropList = document.getElementsByClassName("dropdownSetting")
-		dropList = [].slice.call(dropList);
+		kango.browser.tabs.getCurrent(function(tab) {
 
-		for (i = 0; i < dropList.length; i++) {
+			var dropList = document.getElementsByClassName("dropdownSetting")
+			dropList = [].slice.call(dropList);
 
-			dropList[i] = dropList[i].value;
+			for (i = 0; i < dropList.length; i++) {
 
-		}
+				dropList[i] = dropList[i].value;
 
-		kango.invokeAsync('kango.storage.setItem', 'outletStatuses', dropList);
+			}
 
-		KangoAPI.closeWindow();
+			kango.invokeAsync('kango.storage.setItem', 'outletStatuses', dropList);
+
+			if ($('#enabled').is(':checked')) {
+
+				kango.invokeAsync('kango.storage.setItem', 'boycottEnabled', true);
+				kango.console.log("Boycott: Enabled")
+
+			} else {
+
+				kango.invokeAsync('kango.storage.setItem', 'boycottEnabled', false);
+				kango.console.log("Boycott: Disabled")
+
+			}
+
+			tab.navigate(tab.getUrl())
+
+		});
 
 	});
 
 	DeepFreezeOptions.init();
 
 });
-
-// var StorageTest = {
-
-// 	init: function() {
-// 		$('#storage-get').click(function(event) {
-// 			StorageTest.testGet();
-// 		});
-
-// 		$('#storage-set').click(function(event) {
-// 			StorageTest.testSet();
-// 		});
-
-// 		$('#storage-remove').click(function(event) {
-// 			StorageTest.testRemove();
-// 		});
-
-// 		$('#storage-keys').click(function(event) {
-// 			StorageTest.testKeys();
-// 		});
-// 	},
-
-// 	testGet: function() {
-// 		kango.invokeAsync('kango.storage.getItem', $('#storage-key').val(), function(value) {
-// 			$('#storage-value').val(value || 'null');
-// 		});
-// 	},
-
-// 	testSet: function() {
-// 		kango.invokeAsync('kango.storage.setItem', $('#storage-key').val(), $('#storage-value').val());
-// 	},
-
-// 	testRemove: function() {
-// 		kango.invokeAsync('kango.storage.removeItem', $('#storage-key').val(), function() {
-// 			$('#storage-value').val('null');
-// 		});
-// 	},
-
-// 	testKeys: function() {
-// 		kango.invokeAsync('kango.storage.getKeys', function(keys) {
-// 			$('#storage-value').val(keys.toString());
-// 		});
-// 	}
-// };
-
-// KangoAPI.onReady(function() {
-// 	$('#ready').show();
-// 	$('#not-ready').hide();
-
-// 	$('#close').click(function(event) {
-// 		KangoAPI.closeWindow()
-// 	});
-
-// 	StorageTest.init();
-// });

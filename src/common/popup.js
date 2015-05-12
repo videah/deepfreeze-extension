@@ -15,7 +15,7 @@ var DeepFreezePopup = {
 				var tableBody = document.createElement("tbody")
 
 				table.style.borderCollapse = "seperate"
-				table.style.borderSpacing = "1px 1px"
+				table.style.borderSpacing = "11px 1px"
 
 				table.appendChild(tableBody);
 
@@ -31,7 +31,6 @@ var DeepFreezePopup = {
 
 					div.style.width = "250px"
 					div.style.height = "50px"
-					div.style.backgroundColor = "#dde"
 					div.className = "listing"
 
 					lvl.style.width = "50px"
@@ -42,6 +41,7 @@ var DeepFreezePopup = {
 					lvl.style.textAlign = "center"
 					lvl.style.lineHeight = "50px"
 					lvl.style.verticalAlign = "middle"
+					lvl.style.fontSize = "12px"
 					lvl.innerHTML = "???"
 
 					link.style.width = "200px"
