@@ -153,7 +153,7 @@ function DeepFreeze() {
 
 					kango.console.log("Site " + outletFullDomain + " is boycotted!")
 
-					event.target.navigate(convertToOutletPage(outlets[i]));
+					//event.target.navigate(convertToOutletPage(outlets[i]));
 
 				}
 			}
@@ -163,7 +163,7 @@ function DeepFreeze() {
 	});
 
 	// Get the journalists from that page.
-	kango.browser.addEventListener(kango.browser.event.TAB_CHANGED, function(event) {
+	kango.browser.addEventListener(kango.browser.event.DOCUMENT_COMPLETE, function(event) {
 
 		var emptyJournos = []
 		self._setLevel(0) // Reset the level to be sure
@@ -174,7 +174,17 @@ function DeepFreeze() {
 			journos: journoList
 		}
 
-		event.target.dispatchMessage("getJournos", data)
+		event.target.dispatchMessage("generateJournos", data)
+
+	});
+
+	kango.browser.addEventListener(kango.browser.event.TAB_CHANGED, function(event) {
+
+		var emptyJournos = []
+		self._setLevel(0)
+		kango.storage.setItem("foundJournos", emptyJournos)
+
+		event.target.dispatchMessage("getJournos")
 
 	});
 

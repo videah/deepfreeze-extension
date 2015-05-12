@@ -14,6 +14,9 @@ var DeepFreezePopup = {
 				var table = document.createElement("table")
 				var tableBody = document.createElement("tbody")
 
+				table.style.borderCollapse = "seperate"
+				table.style.borderSpacing = "1px 1px"
+
 				table.appendChild(tableBody);
 
 				foundJournos.sort();
@@ -23,11 +26,34 @@ var DeepFreezePopup = {
 					var tr = document.createElement("tr");
 					var td = document.createElement("td");
 					var div = document.createElement("div");
+					var lvl = document.createElement("div");
+					var link = document.createElement("div");
 
-					div.style.width = "200px"
-					div.style.height = "25px"
-					div.innerHTML = foundJournos[i]
+					div.style.width = "250px"
+					div.style.height = "50px"
+					div.style.backgroundColor = "#dde"
+					div.className = "listing"
 
+					lvl.style.width = "50px"
+					lvl.style.height = "50px"
+					lvl.style.backgroundColor = "#847575"
+					lvl.style.color = "white"
+					lvl.style.float = "left"
+					lvl.style.textAlign = "center"
+					lvl.style.lineHeight = "50px"
+					lvl.style.verticalAlign = "middle"
+					lvl.innerHTML = "???"
+
+					link.style.width = "200px"
+					link.style.height = "50px"
+					link.style.float = "left"
+					link.style.lineHeight = "50px"
+					link.style.textAlign = "center"
+					link.style.verticalAlign = "middle"
+					link.innerHTML = foundJournos[i]
+
+					div.appendChild(lvl);
+					div.appendChild(link);
 					td.appendChild(div);
 					tr.appendChild(td);
 					tableBody.appendChild(tr);
@@ -50,7 +76,7 @@ var DeepFreezePopup = {
 					journos: journoList
 					}
 
-					tab.dispatchMessage("getJournos", data)
+					tab.dispatchMessage("generateJournos", data)
 					KangoAPI.closeWindow();
 
 				});

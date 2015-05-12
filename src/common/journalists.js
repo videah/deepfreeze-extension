@@ -5,15 +5,17 @@
 // @require jquery-1.9.1.min.js
 // ==/UserScript==
 
-kango.invokeAsync("kango.storage.getItem", "journoList", function(data) {
+foundJournos = []
 
-	scanForJournos(data);
+// kango.invokeAsync("kango.storage.getItem", "journoList", function(data) {
 
-});
+// 	scanForJournos(data);
+
+// });
 
 function scanForJournos(journoList) {
 
-	var foundJournos = []
+	foundJournos.length = 0; // Reset foundJournos array.
 
 	for (i = 0; i < journoList.length; i++) {
 
@@ -31,13 +33,23 @@ function scanForJournos(journoList) {
 		journos: foundJournos
 	}
 
-	kango.dispatchMessage("foundJournos", data)
-	kango.console.log("Finished scan.")
+	kango.dispatchMessage("foundJournos", data);
+	kango.console.log("Finished scan.");
 
 }
 
-kango.addMessageListener("getJournos", function(event) {
+kango.addMessageListener("generateJournos", function(event) {
 
 	scanForJournos(event.data.journos);
 
 });
+
+kango.addMessageListener("getJournos", function(event) {
+
+	var data = {
+		journos: foundJournos
+	}
+
+	kango.dispatchMessage("foundJournos", data);
+
+})
