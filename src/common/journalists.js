@@ -7,12 +7,6 @@
 
 foundJournos = []
 
-// kango.invokeAsync("kango.storage.getItem", "journoList", function(data) {
-
-// 	scanForJournos(data);
-
-// });
-
 function scanForJournos(journoList) {
 
 	foundJournos.length = 0; // Reset foundJournos array.
@@ -52,4 +46,4 @@ kango.addMessageListener("getJournos", function(event) {
 
 	kango.dispatchMessage("foundJournos", data);
 
-})
+});

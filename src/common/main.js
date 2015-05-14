@@ -110,6 +110,18 @@ function getJournoList() { // Hehe, get it, JournoList.
 
 }
 
+function encodeToURL(string) {
+
+	string = string.toLowerCase();
+	string = string.replace(" ", "_");
+
+	string = string.replace("“", "%26%23147%3B");
+	string = string.replace("”", "%26%23148%3B")
+
+	return string
+	
+}
+
 ////////////////////////////////////////
 
 function DeepFreeze() {
@@ -153,8 +165,6 @@ function DeepFreeze() {
 
 				kango.console.log("Site " + outletFullDomain + " is on the DeepFreeze outlet list.")
 
-				kango.console.log(status)
-
 				if (status == "Boycotted") {
 
 					kango.console.log("Site " + outletFullDomain + " is boycotted!")
@@ -175,7 +185,7 @@ function DeepFreeze() {
 
 		var emptyJournos = []
 		self._setNumOfJournos(0) // Reset the level to be sure
-		kango.storage.setItem("foundJournos", emptyJournos) // Reset the Journo list for popup
+		kango.storage.setItem("foundJournos", emptyJournos) // Reset the Journo list for popup#
 
 		var journoList = kango.storage.getItem('journoList');
 		var data = {
@@ -205,6 +215,7 @@ function DeepFreeze() {
 
 		kango.storage.setItem("foundJournos", event.data.journos)
 		self._setNumOfJournos(event.data.journos.length)
+		kango.console.log("Yeeeeh boi")
 
 	});
 

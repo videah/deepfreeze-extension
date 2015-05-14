@@ -62,6 +62,10 @@ var DeepFreezePopup = {
 
 				tableDiv.appendChild(table)
 
+			} else {
+
+				$('#refresh').text('Scan')
+
 			}
 
 		});
