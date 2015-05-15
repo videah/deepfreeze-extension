@@ -179,32 +179,38 @@ function DeepFreeze() {
 	// Redirect from boycotted sites.
 	kango.browser.addEventListener(kango.browser.event.BEFORE_NAVIGATE, function(event) {
 
-		var emptyJournos = []
-		self._setNumOfJournos(0) // Reset the level to be sure
-		kango.storage.setItem("foundJournos", emptyJournos) // Reset the Journo list for popup
+		var enabled = kango.storage.getItem('boycottEnabled')
 
-		var outlets = kango.storage.getItem('outlets');
-		var outletStatuses = kango.storage.getItem('outletStatuses');
+		if (enabled == true) {
 
-		for (i = 0; i < outlets.length; i++) {
+			var emptyJournos = []
+			self._setNumOfJournos(0) // Reset the level to be sure
+			kango.storage.setItem("foundJournos", emptyJournos) // Reset the Journo list for popup
 
-			var domain = getDomainFromUrl(event.url);
-			var outletDomain = getDomainFromOutlet(outlets[i]); // outlet.domain
-			var outletFullDomain = getFullDomainFromOutlet(outlets[i]); // www.outlet.domain
+			var outlets = kango.storage.getItem('outlets');
+			var outletStatuses = kango.storage.getItem('outletStatuses');
 
-			var status = outletStatuses[i]
+			for (i = 0; i < outlets.length; i++) {
 
-			if (domain == outletDomain || domain == outletFullDomain) {
+				var domain = getDomainFromUrl(event.url);
+				var outletDomain = getDomainFromOutlet(outlets[i]); // outlet.domain
+				var outletFullDomain = getFullDomainFromOutlet(outlets[i]); // www.outlet.domain
 
-				kango.console.log("Site " + outletFullDomain + " is on the DeepFreeze outlet list.")
+				var status = outletStatuses[i]
 
-				if (status == "Boycotted") {
+				if (domain == outletDomain || domain == outletFullDomain) {
 
-					kango.console.log("Site " + outletFullDomain + " is boycotted!")
+					kango.console.log("Site " + outletFullDomain + " is on the DeepFreeze outlet list.")
 
-					event.target.navigate(convertToOutletPage(outlets[i]));
+					if (status == "Boycotted") {
 
+						kango.console.log("Site " + outletFullDomain + " is boycotted!")
+
+						event.target.navigate(convertToOutletPage(outlets[i]));
+
+					}
 				}
+
 			}
 
 		}

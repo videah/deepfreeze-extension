@@ -27,6 +27,12 @@
 
 }
 
+.optionsHeader {
+
+	text-align: center;
+
+}
+
 @font-face {
 	font-family: 'League Spartan';
 	src: url('leaguespartan-bold.eot');
