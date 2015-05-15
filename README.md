@@ -6,8 +6,8 @@ This browser extension is an unofficial extension for [deepfreeze.it](http://dee
 
 ### Current Features
 Note: These aren't fully working yet.
- * Blocking Outlets by DeepFreeze status (Boycotted or Neutral)
- * Manually blocking Outlets
+ * Manually blocking Outlets, redirecting to their DeepFreeze page when attempting to navigate to them.
+ * Scanning pages for Journalist names, with a list allowing you to jump to their DeepFreeze page.
 
 ### Supported Browsers
  * Firefox
@@ -15,7 +15,7 @@ Note: These aren't fully working yet.
  * Safari
 
 ### Possible Upcoming Features
- * Find mentions of journalists on the page and allow you to jump to their DeepFreeze page
+ * Highlight Journalist names.
 
 ### Building
 This extension uses the [Kango Extension Framework](http://kangoextensions.com/), so you'll need Python 2.7 to build.
