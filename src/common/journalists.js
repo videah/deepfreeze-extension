@@ -6,10 +6,12 @@
 // ==/UserScript==
 
 foundJournos = []
+journoLevels = []
 
-function scanForJournos(journoList) {
+function scanForJournos(journoList, levels) {
 
 	foundJournos.length = 0; // Reset foundJournos array.
+	journoLevels.length = 0; // Reset journoLevels array.
 
 	for (i = 0; i < journoList.length; i++) {
 
@@ -17,6 +19,7 @@ function scanForJournos(journoList) {
 
 		if (containsJourno.length) {
 			
+			journoLevels[foundJournos.length] = levels[i]
 			foundJournos[foundJournos.length] = journoList[i]
 
 		}
@@ -24,7 +27,8 @@ function scanForJournos(journoList) {
 	}
 
 	var data = {
-		journos: foundJournos
+		journos: foundJournos,
+		levels: journoLevels
 	}
 
 	kango.dispatchMessage("foundJournos", data);
@@ -34,14 +38,15 @@ function scanForJournos(journoList) {
 
 kango.addMessageListener("generateJournos", function(event) {
 
-	scanForJournos(event.data.journos);
+	scanForJournos(event.data.journos, event.data.levels);
 
 });
 
 kango.addMessageListener("getJournos", function(event) {
 
 	var data = {
-		journos: foundJournos
+		journos: foundJournos,
+		levels: journoLevels
 	}
 
 	kango.dispatchMessage("foundJournos", data);

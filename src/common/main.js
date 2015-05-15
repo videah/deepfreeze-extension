@@ -3,7 +3,7 @@ function convertToOutletPage(outlet) {
 
 	var finalDomain;
 	finalDomain = outlet.toLowerCase();
-	finalDomain = finalDomain.replace(" ", "_"); // Replace spaces
+	finalDomain = finalDomain.replace(/ /g, "_"); // Replace spaces
 	finalDomain = "http://deepfreeze.it/outlet.php?o=" + finalDomain
 	return finalDomain;
 
@@ -13,7 +13,7 @@ function getDomainFromOutlet(outlet) { // outlet.domain
 
 	var finalDomain;
 	finalDomain = outlet.toLowerCase();
-	finalDomain = finalDomain.replace(" ", ""); // Strip spaces
+	finalDomain = finalDomain.replace(/ /g, ""); // Strip spaces
 	if (finalDomain.indexOf(".") == -1 ) { // Find full stops, if there is then we don't need to supply a TLD :D
 		finalDomain = finalDomain + ".com";
 	}
@@ -25,7 +25,7 @@ function getFullDomainFromOutlet(outlet) { // www.outlet.domain
 
 	var finalDomain;
 	finalDomain = outlet.toLowerCase();
-	finalDomain = finalDomain.replace(" ", ""); // Strip spaces
+	finalDomain = finalDomain.replace(/ /g, ""); // Strip spaces
 	if (finalDomain.indexOf(".") == -1 ) {
 		finalDomain = finalDomain + ".com";
 	}
@@ -110,19 +110,50 @@ function getJournoList() { // Hehe, get it, JournoList.
 
 }
 
+function getJournoLevels() {
+
+	var request = kango.xhr.getXMLHttpRequest();
+	request.open('GET', 'http://deepfreeze.it/journo.php', false);
+	request.send(null);
+
+	var deepFreezeHTML = document.implementation.createHTMLDocument("journalists");
+	deepFreezeHTML.documentElement.innerHTML = request.responseText;
+
+	var levelList = deepFreezeHTML.getElementsByClassName("td_n");
+	levelList = [].slice.call(levelList);
+
+	for (i = 0; i < 3; i++) {
+		levelList.shift();
+	}
+
+	for (i = 0; i < levelList.length; i++) {
+
+		levelList[i] = levelList[i].textContent;
+		levelList[i] = levelList[i].trim();
+
+	}
+
+	kango.console.log(levelList)
+
+	return levelList;
+
+}
+
 function encodeToURL(string) {
 
 	string = string.toLowerCase();
-	string = string.replace(" ", "_");
-
-	string = string.replace("“", "%26%23147%3B");
-	string = string.replace("”", "%26%23148%3B")
+	string = string.replace(/ /g, "_");
+	string = unescape(string)
 
 	return string
 	
 }
 
 ////////////////////////////////////////
+
+//kango.console.log(encodeToURL("Dan “Shoe” Hsu"))
+
+kango.console.log(encodeToURL("dan_%26%23147%3Bshoe%26%23148%3B_hsu"))
 
 function DeepFreeze() {
 
@@ -136,9 +167,11 @@ function DeepFreeze() {
 
 	kango.storage.setItem('outlets', getOutletList()); // Get the list of outlets from DeepFreeze.
 
-	self._generateDefaultSettings()
+	kango.storage.setItem('journoList', getJournoList()); // Get the list of Journalists from DeepFreeze.
 
-	kango.storage.setItem('journoList', getJournoList()); // Get the list of Journolists from DeepFreeze
+	kango.storage.setItem('levelList', getJournoLevels()); // Get the DeepFreeze levels of the Journalists.
+
+	self._generateDefaultSettings();
 
 	var emptyJournos = []
 	kango.storage.setItem("foundJournos", emptyJournos) // Reset the foundJournos List.
@@ -186,10 +219,13 @@ function DeepFreeze() {
 		var emptyJournos = []
 		self._setNumOfJournos(0) // Reset the level to be sure
 		kango.storage.setItem("foundJournos", emptyJournos) // Reset the Journo list for popup#
+		kango.storage.setItem("foundLevels", emptyJournos)
 
 		var journoList = kango.storage.getItem('journoList');
+		var levelList = kango.storage.getItem('levelList');
 		var data = {
-			journos: journoList
+			journos: journoList,
+			levels: levelList
 		}
 
 		event.target.dispatchMessage("generateJournos", data)
@@ -204,6 +240,7 @@ function DeepFreeze() {
 		var emptyJournos = []
 		self._setNumOfJournos(0)
 		kango.storage.setItem("foundJournos", emptyJournos)
+		kango.storage.setItem("foundLevels", emptyJournos)
 
 		event.target.dispatchMessage("getJournos")
 
@@ -213,9 +250,11 @@ function DeepFreeze() {
 
 		// Set the badge icon + store the found Journalists.
 
+		kango.console.log(event.data.levels)
+
 		kango.storage.setItem("foundJournos", event.data.journos)
+		kango.storage.setItem("foundLevels", event.data.levels)
 		self._setNumOfJournos(event.data.journos.length)
-		kango.console.log("Yeeeeh boi")
 
 	});
 
