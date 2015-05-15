@@ -139,6 +139,30 @@ function getJournoLevels() {
 
 }
 
+function getJournoLinks() {
+
+	var request = kango.xhr.getXMLHttpRequest();
+	request.open('GET', 'http://deepfreeze.it/journo.php', false);
+	request.send(null);
+
+	var deepFreezeHTML = document.implementation.createHTMLDocument("journalists");
+	deepFreezeHTML.documentElement.innerHTML = request.responseText;
+
+	var linkList = deepFreezeHTML.getElementsByClassName("td_w");
+	linkList = [].slice.call(linkList);
+	linkList.shift();
+
+	for (i = 0; i < linkList.length; i++) {
+
+		linkList[i] = linkList[i].children.item(0);
+		linkList[i] = linkList[i].attributes.href.value;
+
+	}
+
+	return linkList;
+
+}
+
 function encodeToURL(string) {
 
 	string = string.toLowerCase();
@@ -168,6 +192,8 @@ function DeepFreeze() {
 	kango.storage.setItem('outlets', getOutletList()); // Get the list of outlets from DeepFreeze.
 
 	kango.storage.setItem('journoList', getJournoList()); // Get the list of Journalists from DeepFreeze.
+
+	kango.storage.setItem('journoLinks', getJournoLinks()); // Get's the links to Journalists DeepFreeze pages.
 
 	kango.storage.setItem('levelList', getJournoLevels()); // Get the DeepFreeze levels of the Journalists.
 
@@ -226,12 +252,15 @@ function DeepFreeze() {
 		self._setNumOfJournos(0) // Reset the level to be sure
 		kango.storage.setItem("foundJournos", emptyJournos) // Reset the Journo list for popup#
 		kango.storage.setItem("foundLevels", emptyJournos)
+		kango.storage.setItem("foundLinks", emptyJournos)
 
 		var journoList = kango.storage.getItem('journoList');
 		var levelList = kango.storage.getItem('levelList');
+		var journoLinks = kango.storage.getItem('journoLinks')
 		var data = {
 			journos: journoList,
-			levels: levelList
+			levels: levelList,
+			links: journoLinks
 		}
 
 		event.target.dispatchMessage("generateJournos", data)
@@ -247,6 +276,7 @@ function DeepFreeze() {
 		self._setNumOfJournos(0)
 		kango.storage.setItem("foundJournos", emptyJournos)
 		kango.storage.setItem("foundLevels", emptyJournos)
+		kango.storage.setItem("foundLinks", emptyJournos)
 
 		event.target.dispatchMessage("getJournos")
 
@@ -256,10 +286,10 @@ function DeepFreeze() {
 
 		// Set the badge icon + store the found Journalists.
 
-		kango.console.log(event.data.levels)
-
 		kango.storage.setItem("foundJournos", event.data.journos)
 		kango.storage.setItem("foundLevels", event.data.levels)
+		kango.storage.setItem("foundLinks", event.data.links)
+
 		self._setNumOfJournos(event.data.journos.length)
 
 	});
