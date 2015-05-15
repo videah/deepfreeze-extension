@@ -5,6 +5,13 @@
 // @require jquery-1.9.1.min.js
 // ==/UserScript==
 
+// Creates a case insensitive :contains()
+$.extend($.expr[":"], {
+	"containsNC": function(elem, i, match, array) {
+		return (elem.textContent || elem.innerText || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+	}
+});
+
 var foundJournos = []
 var journoLevels = []
 var journoLinks = []
@@ -17,7 +24,7 @@ function scanForJournos(journoList, levels, links) {
 
 	for (i = 0; i < journoList.length; i++) {
 
-		var containsJourno = $('div:contains("' + journoList[i] + '")')
+		var containsJourno = $('div:containsNC("' + journoList[i] + '")')
 
 		if (containsJourno.length) {
 			
