@@ -21,7 +21,7 @@ Note: These aren't fully working yet.
 This extension uses the [Kango Extension Framework](http://kangoextensions.com/), so you'll need Python 2.7 to build.
 
 To build, run:
-```kango.py build path/to/src/folder/here```
+```kango.py build path/to/repo/folder/here```
 
 ### Notes
 This extension was made to help learn JavaScript, so the code is probably garbage.
