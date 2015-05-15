@@ -105,14 +105,24 @@ var DeepFreezePopup = {
 
 			kango.invokeAsync("kango.storage.getItem", "journoList", function(journoList) {
 
-				kango.browser.tabs.getCurrent(function(tab) {
+				kango.invokeAsync("kango.storage.getItem", "levelList", function(levelList) {
 
-					var data = {
-					journos: journoList
-					}
+					kango.invokeAsync("kango.storage.getItem", "journoLinks", function(journoLinks) {
 
-					tab.dispatchMessage("generateJournos", data)
-					KangoAPI.closeWindow();
+						kango.browser.tabs.getCurrent(function(tab) {
+
+							var data = {
+								journos: journoList,
+								levels: levelList,
+								links: journoLinks
+							}
+
+							tab.dispatchMessage("generateJournos", data)
+							KangoAPI.closeWindow();
+
+						});
+
+					});
 
 				});
 
