@@ -161,7 +161,7 @@ function DeepFreeze() {
 
 	kango.ui.browserButton.setPopup({
 		url: 'popup.html',
-		width: 300,
+		width: 400,
 		height: 300
 	});
 
