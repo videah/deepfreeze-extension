@@ -24,7 +24,7 @@ To build, run:
 ```kango.py build path/to/repo/folder/here```
 
 ### Notes
-This extension was made to help learn JavaScript, so the code is probably garbage.
+This extension was made to help learn JavaScript, so the code is ~~probably~~ garbage.
 
 Feel free to make a pull request on any junk code you see.
 
