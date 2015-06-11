@@ -193,8 +193,8 @@ function DeepFreeze() {
 
 	kango.ui.browserButton.setPopup({
 		url: 'popup.html',
-		width: 400,
-		height: 300
+		width: 310,
+		height: 500
 	});
 
 	kango.storage.setItem('journoList', getJournoList()); // Get the list of Journalists from DeepFreeze.
