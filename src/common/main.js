@@ -173,11 +173,19 @@ function encodeToURL(string) {
 	
 }
 
+function objectSort(property) {
+	var sortOrder = 1;
+	if(property[0] === "-") {
+		sortOrder = -1;
+		property = property.substr(1);
+	}
+	return function (a,b) {
+		var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+		return result * sortOrder;
+	}
+}
+
 ////////////////////////////////////////
-
-//kango.console.log(encodeToURL("Dan “Shoe” Hsu"))
-
-kango.console.log(encodeToURL("dan_%26%23147%3Bshoe%26%23148%3B_hsu"))
 
 function DeepFreeze() {
 
@@ -188,8 +196,6 @@ function DeepFreeze() {
 		width: 400,
 		height: 300
 	});
-
-	kango.storage.setItem('outlets', getOutletList()); // Get the list of outlets from DeepFreeze.
 
 	kango.storage.setItem('journoList', getJournoList()); // Get the list of Journalists from DeepFreeze.
 
@@ -209,30 +215,32 @@ function DeepFreeze() {
 
 		if (enabled == true) {
 
+			kango.console.log("Detecting boycott...")
 			var emptyJournos = []
 			self._setNumOfJournos(0) // Reset the level to be sure
 			kango.storage.setItem("foundJournos", emptyJournos) // Reset the Journo list for popup
+			var outletList = kango.storage.getItem("outletList")
 
-			var outlets = kango.storage.getItem('outlets');
-			var outletStatuses = kango.storage.getItem('outletStatuses');
+			for (i = 0; i < outletList.length; i++) {
 
-			for (i = 0; i < outlets.length; i++) {
+				var outletName = outletList[i].name
+				var outletStatus = outletList[i].status
 
 				var domain = getDomainFromUrl(event.url);
-				var outletDomain = getDomainFromOutlet(outlets[i]); // outlet.domain
-				var outletFullDomain = getFullDomainFromOutlet(outlets[i]); // www.outlet.domain
-
-				var status = outletStatuses[i]
+				var outletDomain = getDomainFromOutlet(outletName); // outlet.domain
+				var outletFullDomain = getFullDomainFromOutlet(outletName); // www.outlet.domain
 
 				if (domain == outletDomain || domain == outletFullDomain) {
 
+					kango.console.log(outletStatus)
+
 					kango.console.log("Site " + outletFullDomain + " is on the DeepFreeze outlet list.")
 
-					if (status == "Boycotted") {
+					if (outletStatus == "Boycotted") {
 
 						kango.console.log("Site " + outletFullDomain + " is boycotted!")
 
-						event.target.navigate(convertToOutletPage(outlets[i]));
+						event.target.navigate(convertToOutletPage(outletName));
 
 					}
 				}
@@ -305,40 +313,58 @@ DeepFreeze.prototype = {
 
 	_generateDefaultSettings: function() {
 
-		if (kango.storage.getItem('outletStatuses') == null) { // Boycott Statuses
+		var outlets = getOutletList();
 
-			kango.console.log("Created new status list.")
-		
-			// We haven't created a status list, do that now.
+		if (kango.storage.getItem('outletList') == null) {
 
-			var newStatuses = []
-			var o = kango.storage.getItem('outlets')
+			var outletList = []
 
-			for (i = 0; i < o.length; i++) {
+			for (i = 0; i < outlets.length; i++) {
 
-				newStatuses[i] = 'Neutral'
+				outletList[i] = {name:outlets[i], status:"Neutral"}
 
 			}
 
-			kango.storage.setItem('outletStatuses', newStatuses)
+			kango.storage.setItem('outletList', outletList)
+
+			kango.console.log('Created outletList...')
 
 		}
 
-		var o = kango.storage.getItem('outlets')
-		var s = kango.storage.getItem('outletStatuses')
+		var o = kango.storage.getItem('outletList')
+		var n = outlets
 
-		if (o.length > s.length) {
+		if (o.length < n.length) { 
 
-			// If a new outlets been added to DeepFreeze, add it to the list. 
-			// NOTE: What happens if an outlets deleted from DeepFreeze? No idea, but I doubt it'll happen.
+			kango.console.log('New outlet(s) detected, adding to outletList...')
 
-			var dif = o.length - s.length
+			// If new outlets are on DeepFreeze, add them to the end of the outletList and sort it.
+			// No idea if this works lol.
 
-			for (i = 0; i < dif; i++) {
+			var dif = n.length - o.length
 
-				s[s.length + i] = 'Neutral'
+			for (i = 0; i < diff; i++) {
+
+				for (j = 0; j < n.length; j++) {
+
+					for (k = 0; k < o.length; k++) {
+
+						if (n[j] == o[k]) {
+
+							o[o.length] = {name:n[j], status:"Neutral"}
+
+						}
+
+					}
+
+				}
 
 			}
+
+			o.sort(objectSort('name'))
+			kango.storage.setItem('outletList', o)
+
+			kango.console.log('Finished!')
 
 		}
 
