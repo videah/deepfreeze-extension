@@ -29,3 +29,9 @@ This extension was made to help learn JavaScript, so the code is ~~probably~~ ga
 Feel free to make a pull request on any junk code you see.
 
 Also, the extension is currently scraping the data directly from [deepfreeze.it](http://deepfreez.it) right now, as they currently do not have an API. If an API is created, I will implement it here.
+
+## License
+
+This code is licensed under the [**MIT Open Source License**][MIT]. Check out the LICENSE file for more information.
+
+[MIT]: http://www.opensource.org/licenses/mit-license.html
