@@ -5,7 +5,7 @@
 	"background_scripts": [
 		"main.js"
 	], 
-	"homepage_url": "http://github.com/VideahGams", 
+	"homepage_url": "http://github.com/VideahGams/deepfreeze-extension", 
 	"version": "0.1.0", 
 	"browser_button": {
 		"caption": "DeepFreeze", 
