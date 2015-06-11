@@ -2,6 +2,12 @@
   <img src="http://i.imgur.com/xsBy9vN.png"/>
 </p>
 
+![](https://img.shields.io/github/issues/VideahGams/deepfreeze-extension.svg)
+![](https://img.shields.io/github/forks/VideahGams/deepfreeze-extension.svg)
+![](https://img.shields.io/github/stars/VideahGams/deepfreeze-extension.svg)
+![](https://img.shields.io/badge/stage-alpha-blue.svg)
+![](https://img.shields.io/badge/license-MIT-blue.svg)
+
 This browser extension is an unofficial extension for [deepfreeze.it](http://deepfreeze.it)
 
 ### Current Features
