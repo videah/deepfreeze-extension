@@ -18,7 +18,6 @@ Note: These aren't fully working yet.
 ### Supported Browsers
  * Firefox
  * Chrome
- * Safari
 
 ### Possible Upcoming Features
  * Highlight Journalist names.
